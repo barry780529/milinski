@@ -1,0 +1,32 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %} Results {% endblock %}
+
+{% block content %}
+
+    <p>
+        Your total endowment is {{Constants.Total_endowment}} dollars.
+        You contributed {{ player.cumulate_contribution }} in total 3 rounds.
+        Your group contributed {{ group.cum_total_contribution }} in total 3 rounds.,
+        
+        {% if group.cum_total_contribution < Constants.threshold %}
+            which is smaller than the threshold to have a probability to experience a catastrophe.
+        {% else %}
+            which is larger than the threshold to avoid a catastrophe certainly.
+        {% endif %}
+        
+        {% if group.catastrophe %}
+            Your group experiences a catastrophe.
+        {% else %}
+            Your group does not experience a catastrophe.
+        {% endif %}
+
+        
+        Therefore, your profit is {{ player.final_payoff}}
+    </p>
+
+    {% next_button %}
+
+{% endblock %}
+

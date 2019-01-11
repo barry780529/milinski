@@ -1,0 +1,52 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %} Round {{ subsession.round_number }} of {{ Constants.num_rounds }}  {% endblock %}
+
+{% block content %}
+	<h4> Instruction </h4>
+	
+    <p>
+        This is a public goods game with 
+        {{ Constants.players_per_group }} players per group. <br>
+        Your endowment in each round is {{ Constants.endowment }} dollars.<br>
+        There is {{ Constants.num_rounds }} rounds in the game.<br>
+        Your decision is to dicide how many dollars of your endowment contributed to a common pool to prevent a catastrophe.<br>
+        If the amount of money in the common pool of your group is equal or larger than {{Constants.threshold}},<br>
+        your group will not encounter a catastrophe certainly.<br>
+        Otherwise, your group has {{Constants.disaster_prob}} probability confronting a catastrophe, which makes the profit of all the members become zero.<br>
+        <br>
+	</p>
+	{% if subsession.round_number != 1 %}
+	<h4> Round history </h4>
+    <table class="table">
+        <tr>
+            <th>Round\Player</th>
+            <th>Player 1</th>
+			<th>Player 2</th>
+        </tr>
+        {% for row in player.contribution_each_player_round %}
+            <tr>
+                <td>Round {{ forloop.counter }}</td>
+				{% for c in row %}
+					<td>{{c}}</td>
+				{% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
+	{% else %}
+	
+	{% endif %}
+	<h4> Decision </h4>
+	<p>
+        This Round {{subsession.round_number}}. <br>
+        The group total contribution so far is {{ cum_group_contribution_sofar }},<br>
+        and your own cumulative payoff is {{cum_participant_contribution_sofar}}.
+    </p>
+
+
+    {% formfield player.contribution label="How much will you contribute from your endowment?" %}
+
+    {% next_button %}
+
+{% endblock %}

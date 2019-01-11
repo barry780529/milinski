@@ -1,0 +1,35 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %} Result of Round {{ subsession.round_number }} {% endblock %}
+
+{% block content %}
+	<h4>
+		Summary
+	</h4>
+    <p>
+        Round {{ subsession.round_number }} of {{ Constants.num_rounds }}.<br>
+        You started with an endowment of {{ Constants.endowment }}<br>
+        of which you contributed {{ player.contribution }}.<br>
+        Your group contributed {{ group.total_contribution }},<br>
+        resulting in an collective funding pool {{ group.cum_total_contribution }}.<br>
+        The threshold to prevent a catastrophe certainly is {{ Constants.threshold }}<br>
+        Your own cumulative payoff is {{player.cumulate_payoff}}.
+    </p>
+	<h4>
+		Contribution of each player
+	</h4>	
+    <table class="table">
+        <tr>
+            <th>Player 1</th>
+			<th>Player 2</th>
+        </tr>
+		<tr>
+        {% for p in player.get_others_in_group %}
+			<th>{{p.contribution}}</th>
+        {% endfor %}
+		</tr>
+    </table>
+    {% next_button %}
+
+{% endblock %}
