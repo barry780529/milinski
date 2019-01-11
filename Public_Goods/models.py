@@ -17,9 +17,8 @@ class Constants(BaseConstants):
     num_rounds = 3#The round here is the repeat process, so only one
     endowment = c(4)# endowment for each round
     threshold = c(18) #The threshold to prevent a catastrophe
-    Total_endowment=endowment*players_per_group
+    Total_endowment=endowment*players_per_group #obtaining endowment during all rounds
     disaster_prob = 0.9 #the probability to lose all payoff if not satisfy the thresholdor , can be 0.5 and 0.1 in other conditions
-
 
 class Subsession(BaseSubsession):
     pass
@@ -37,15 +36,13 @@ class Player(BasePlayer):
         # this gives:
         # [$0.00, $2.00, $4,00]
     )
-    #cumulate_contribution = models.CurrencyField(initial=0)#define players' cumulative contribution
-    def cumulate_contribution(self):
+    def cumulate_contribution(self):#return players' cumulative contribution
         return sum([p.contribution for p in self.in_all_rounds()])
     payoff = models.CurrencyField()#define players' payoff in the round
-    #cumulate_payoff = models.CurrencyField(initial=0)#define players' cumulative payoff
-    def cumulate_payoff (self):
+    def cumulate_payoff (self):#define players' cumulative payoff
         return sum([p.payoff for p in self.in_all_rounds()])
-    final_payoff = models.CurrencyField()
-    def contribution_each_player_round(self):
+    final_payoff = models.CurrencyField()#the realized payoff
+    def contribution_each_player_round(self):# return a list regarding to other players' contribution in each round
         history = []
         for other_player in self.get_others_in_group():
             each_round = []

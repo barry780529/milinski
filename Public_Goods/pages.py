@@ -11,7 +11,9 @@ class Contribute(Page):
         group = self.group
         player = self.player
         return {
+            # cumulative group cintribution before this round showing in contribute page
             'cum_group_contribution_sofar': sum([g.total_contribution for g in group.in_previous_rounds()]),
+            #  cumulative participant cintribution before this round showing in contribute page
             'cum_participant_contribution_sofar': sum([p.payoff for p in player.in_previous_rounds()])
         }
 
@@ -20,15 +22,11 @@ class RoundWaitPage(WaitPage):#Any code you define here will be executed once al
     def after_all_players_arrive(self):#The action while all players have made choices
         group = self.group
         players = group.get_players()
-        # group.num_Round = group.num_Round+1#round counter
-        # group.old_num_Round = group.num_Round-1
         contributions = [p.contribution for p in players]#each player's contribution in the round
         group.total_contribution = sum(contributions)#the group contribution in the round
 
         for p in players:
-            #p.cumulate_contribution += p.contribution
             p.payoff = Constants.endowment - p.contribution#players' payoff in the round
-            #p.cumulate_payoff = p.cumulate_payoff+p.payoff#players' cumulative payoff
 
 class ResultWaitPage(WaitPage):
     def is_displayed(self):#"Result" page only shows at 3th round
@@ -38,18 +36,18 @@ class ResultWaitPage(WaitPage):
         players = group.get_players()
         #cum_total_contribution=group.cum_total_contribution
         if group.cum_total_contribution() < Constants.threshold:# whether cumulative group contribution exceeds threshold
-            if random.randint(0, 9) < Constants.disaster_prob*10:#random draw for 90% catastrophe
+            if random.randint(0, 9) < Constants.disaster_prob*10:#random draw of the probaility of catastrophe
                 group.catastrophe = True
                 for p in players:
                     p.final_payoff = 0# if catastrophe happens, everyone's payoff is zero
             else:
                 group.catastrophe = False# no catastrophe
                 for p in players:
-                    p.final_payoff = p.cumulate_payoff()# if catastrophe happens, everyone's payoff is zero
+                    p.final_payoff = p.cumulate_payoff()# if catastrophe does not happens, everyone's payoff  ramains  the same
         else:
             group.catastrophe = False# no catastrophe
             for p in players:
-                p.final_payoff = p.cumulate_payoff()  # if catastrophe happens, everyone's payoff is zero
+                p.final_payoff = p.cumulate_payoff() # if catastrophe does not happens, everyone's payoff  ramains  the same
 
 
 class EachRound(Page):
