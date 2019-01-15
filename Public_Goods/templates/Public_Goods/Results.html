@@ -13,7 +13,7 @@
         {% if group.cum_total_contribution < Constants.threshold %}
             which is smaller than the threshold to have a probability to experience a catastrophe.
         {% else %}
-            which is larger than the threshold to avoid a catastrophe certainly.
+            which is larger than or equal to the threshold to avoid a catastrophe certainly.
         {% endif %}
         
         {% if group.catastrophe %}
