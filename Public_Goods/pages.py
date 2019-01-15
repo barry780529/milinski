@@ -14,7 +14,7 @@ class Contribute(Page):
             # cumulative group cintribution before this round showing in contribute page
             'cum_group_contribution_sofar': sum([g.total_contribution for g in group.in_previous_rounds()]),
             #  cumulative participant cintribution before this round showing in contribute page
-            'cum_participant_contribution_sofar': sum([p.payoff for p in player.in_previous_rounds()])
+            'cum_participant_contribution_sofar': sum([p.temp_payoff for p in player.in_previous_rounds()])
         }
 
 
@@ -26,7 +26,7 @@ class RoundWaitPage(WaitPage):#Any code you define here will be executed once al
         group.total_contribution = sum(contributions)#the group contribution in the round
 
         for p in players:
-            p.payoff = Constants.endowment - p.contribution#players' payoff in the round
+            p.temp_payoff = Constants.endowment - p.contribution#players' payoff in the round
 
 class ResultWaitPage(WaitPage):
     def is_displayed(self):#"Result" page only shows at 3th round
@@ -39,15 +39,15 @@ class ResultWaitPage(WaitPage):
             if random.randint(0, 9) < Constants.disaster_prob*10:#random draw of the probaility of catastrophe
                 group.catastrophe = True
                 for p in players:
-                    p.final_payoff = 0# if catastrophe happens, everyone's payoff is zero
+                    p.payoff = 0# if catastrophe happens, everyone's payoff is zero
             else:
                 group.catastrophe = False# no catastrophe
                 for p in players:
-                    p.final_payoff = p.cumulate_payoff()# if catastrophe does not happens, everyone's payoff  ramains  the same
+                    p.payoff = p.cumulate_payoff()# if catastrophe does not happens, everyone's payoff  ramains  the same
         else:
             group.catastrophe = False# no catastrophe
             for p in players:
-                p.final_payoff = p.cumulate_payoff() # if catastrophe does not happens, everyone's payoff  ramains  the same
+                p.payoff = p.cumulate_payoff() # if catastrophe does not happens, everyone's payoff  ramains  the same
 
 
 class EachRound(Page):

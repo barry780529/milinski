@@ -38,10 +38,10 @@ class Player(BasePlayer):
     )
     def cumulate_contribution(self):#return players' cumulative contribution
         return sum([p.contribution for p in self.in_all_rounds()])
-    payoff = models.CurrencyField()#define players' payoff in the round
+    temp_payoff = models.CurrencyField()#define players' payoff in the round
     def cumulate_payoff (self):#define players' cumulative payoff
-        return sum([p.payoff for p in self.in_all_rounds()])
-    final_payoff = models.CurrencyField()#the realized payoff
+        return sum([p.temp_payoff for p in self.in_all_rounds()])
+    payoff = models.CurrencyField()#the realized payoff
     def contribution_each_player_round(self):# return a list regarding to other players' contribution in each round
         history = []
         for other_player in self.get_others_in_group():
